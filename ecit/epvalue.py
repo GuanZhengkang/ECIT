@@ -7,8 +7,8 @@ def p_stable(p_list:List[float],
              alpha = 1,
              beta = 0,loc = 0,scale = 1):
     n = len(p_list)
-    t = np.sum(levy_stable.ppf(p_list, alpha, beta, loc=loc, scale=scale))
-    return levy_stable.cdf(t, alpha, beta, loc=loc*n, scale=scale*(n**(1/alpha)))
+    t = np.mean(levy_stable.ppf(p_list, alpha, beta, loc=loc, scale=scale))
+    return levy_stable.cdf(t, alpha, beta, loc=loc, scale=scale*(n**(1/alpha-1)))
 
 
 
