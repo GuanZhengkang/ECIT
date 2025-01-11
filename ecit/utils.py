@@ -3,6 +3,7 @@ import random
 
 
 def select_function(index):
+    #{1:x, 2:x^2, 3:x^3, 4:tanh(x), 5:cos(x), 6:exp(-|x|), 7:log(|x|)}
     functions = {
         2: np.square,
         3: lambda x: x ** 3,
@@ -80,7 +81,9 @@ def generate_samples(n=800, indp='C',
                      dx=1, dy=1, dz=1,
                      fun1=None, fun2=None,
                      noise_dis="gaussian", noise_std=0.5,
-                     z_dis="gaussian", **kwargs):
+                     z_dis="gaussian", 
+                     Nc=1,
+                     **kwargs):
     """
     Generate post-nonlinear data
     
@@ -102,7 +105,7 @@ def generate_samples(n=800, indp='C',
         fun1, fun2 : int or None, optional
             Function index for the nonlinear transformation of X, Y.
             If None, a random function is selected from a predefined set:
-            {1:x, 2:x^2, 3:x^3, 4:tanh(x), 5:cos(x), 6:exp(-|x|), 7:log(|x|)}.
+            {1:x, 2:x^2, 3:x^3, 4:tanh(x), 5:cos(x)}
 
         noise_dis : str, optional
             Distribution of noise added to X and Y. Options include:
@@ -143,12 +146,12 @@ def generate_samples(n=800, indp='C',
 
 
     if fun1 is None:
-        fun1 = select_function(random.randint(2, 7))
+        fun1 = select_function(random.randint(2, 5))
     else:
         fun1 = select_function(fun1)
 
     if fun2 is None:
-        fun2 = select_function(random.randint(2, 7))
+        fun2 = select_function(random.randint(2, 5))
     else:
         fun2 = select_function(fun2)
 
@@ -170,7 +173,7 @@ def generate_samples(n=800, indp='C',
         Y = fun2(Z @ Ay + noise_y)
 
     elif indp == 'Nc':
-        C = generate_z(n, 1) * 0.3
+        C = generate_z(n, 1) * Nc
         X = fun1(Z @ Ax + noise_x + C @ np.random.rand(1, dx))
         Y = fun2(Z @ Ay + noise_y + C @ np.random.rand(1, dy))
 
