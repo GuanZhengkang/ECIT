@@ -3,7 +3,8 @@ import random
 
 
 def select_function(index):
-    #{1:x, 2:x^2, 3:x^3, 4:tanh(x), 5:cos(x), 6:exp(-|x|), 7:log(|x|)}
+    # {1:x, 2:x^2, 3:x^3, 4:tanh(x), 5:cos(x), 6:exp(-|x|), 7:log(|x|)}
+    # 实验只用了1-5
     functions = {
         2: np.square,
         3: lambda x: x ** 3,
@@ -207,6 +208,8 @@ def generate_graph_samples(n, num_nodes=5, edge_prob=0.5):
     """
     graph = (np.random.rand(num_nodes, num_nodes) < edge_prob).astype(int)
     np.fill_diagonal(graph, 0)
+    for i in range(num_nodes-1):
+        graph[i+1, i] = 1
     for i in range(num_nodes):
         for j in range(i + 1, num_nodes):
             graph[i, j] = -graph[j, i]
@@ -214,6 +217,7 @@ def generate_graph_samples(n, num_nodes=5, edge_prob=0.5):
     data = []
 
     X1 = np.random.normal(0, 1, n)
+
     data.append(X1)
 
     for i in range(1, num_nodes):
@@ -222,7 +226,7 @@ def generate_graph_samples(n, num_nodes=5, edge_prob=0.5):
         for j in range(i):
             if graph[j, i]:
                 dependencies.append(data[j])
-                functions.append(select_function(np.random.randint(1, 8)))
+                functions.append(select_function(np.random.randint(1, 5)))
         new_var = generate_node(dependencies, functions, n)
         data.append(new_var)
 
@@ -231,14 +235,13 @@ def generate_graph_samples(n, num_nodes=5, edge_prob=0.5):
 
 def generate_node(dependencies, functions, n):
     
-    base = np.random.normal(0, 1, n)
-
+    base = np.random.standard_t(3, n)
+        
     if not dependencies:
         return base
-    
-    alpha = np.random.uniform(0.5, 1, n)
 
     for dep, func in zip(dependencies, functions):
+        alpha = np.random.uniform(0.5, 1, n)
         base += alpha * func(dep)
 
     return base
