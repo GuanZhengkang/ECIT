@@ -1,7 +1,6 @@
 import numpy as np
 import random
 
-
 def select_function(index):
     # {1:x, 2:x^2, 3:x^3, 4:tanh(x), 5:cos(x), 6:exp(-|x|), 7:log(|x|)}
     # 实验只用了1-5
@@ -22,9 +21,11 @@ def generate_noise(n, dimension, nstd, noise_type='gaussian'):
     noise_map = {
         'gaussian': lambda: nstd * np.random.multivariate_normal(np.zeros(dimension), np.eye(dimension), n),
         'laplace': lambda: np.random.laplace(loc=0, scale=nstd, size=(n, dimension)),
-        't': lambda: nstd * np.random.standard_t(df=3, size=(n, dimension)),
-        'cauchy': lambda: np.random.standard_cauchy(size=(n, dimension)),
-        'uniform': lambda: np.random.uniform(low=-nstd, high=nstd, size=(n, dimension))
+        'cauchy': lambda: np.random.standard_cauchy(size=(n, dimension)), # Cauchy <=> Student't(dz=1)
+        't1': lambda: nstd * np.random.standard_t(df=1, size=(n, dimension)),
+        't2': lambda: nstd * np.random.standard_t(df=2, size=(n, dimension)),
+        't3': lambda: nstd * np.random.standard_t(df=3, size=(n, dimension)),
+        't4': lambda: nstd * np.random.standard_t(df=4, size=(n, dimension))
     }
 
     if noise_type not in noise_map:
@@ -52,19 +53,6 @@ def generate_z(n, dimension, z_dis='gaussian', params=None):
         'uniform': lambda: np.random.uniform(
             low=params.get('low', -1),
             high=params.get('high', 1),
-            size=(n, dimension)
-        ),
-        'poisson': lambda: np.random.poisson(
-            lam=params.get('lam', 1),
-            size=(n, dimension)
-        ),
-        'gamma': lambda: np.random.gamma(
-            shape=params.get('shape', 2),
-            scale=params.get('scale', 1),
-            size=(n, dimension)
-        ),
-        'exponential': lambda: np.random.exponential(
-            scale=params.get('scale', 1),
             size=(n, dimension)
         ),
         'cauchy': lambda: np.random.standard_cauchy(

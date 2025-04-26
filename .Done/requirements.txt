@@ -1,0 +1,165 @@
+causal-learn==0.1.4.1
+pycit==0.0.7
+CCIT==0.4
+tensorflow==2.18.0
+scikit-learn==1.4.2
+scipy==1.13.0
+numpy
+pandas
+
+seaborn
+matplotlib
+###
+
+rpy2==3.5.16
+
+# Ensure compatibility between Python and R versions
+# - python == 3.11.8
+# - R (r-base) == 4.4.3
+# 
+# To use the 'RCIT' package from R via rpy2, make sure R is installed and the RCIT package is installed in R
+#
+# To install R:
+#   - Directly from the official website:
+#       R: https://www.r-project.org/
+#       RStudio: https://posit.co/download/rstudio-desktop/
+#       Set environment variables correctly.
+#   - Install R in a conda environment:
+#       conda install -c conda-forge r-base=4.4.3
+#
+# To install the 'RCIT' package in R (https://github.com/ericstrobl/RCIT):
+#   - Install in R:
+#       1. Open R or RStudio (ensure it's the R used by rpy2)
+#       2. Install the 'MASS' package (a dependency for 'RCIT'):
+#
+#           install.packages('MASS', dependencies=TRUE)
+#
+#       3. Install 'RCIT' from GitHub using 'devtools' or 'remotes':
+#
+#           install.packages('devtools')
+#           library(devtools)
+#           install_github('ericstrobl/RCIT')
+#          Or alternatively:
+#           install.packages('remotes')
+#           library(remotes)
+#           install_github('ericstrobl/RCIT')
+#
+#   - Install using rpy2 in Python after downloading R via conda:
+#
+#           # Python code
+#           import rpy2.robjects as ro
+#           from rpy2.robjects.packages import importr
+#           ro.r('install.packages("MASS", dependencies=TRUE)')
+#           ro.r('install.packages("remotes")')
+#           ro.r('library(remotes)')
+#           ro.r('install_github("ericstrobl/RCIT")')
+#           RCIT = importr('RCIT')  # Verify if the installation was successful
+#
+# After installing the RCIT package, you can interact with it from Python using rpy2.
+#
+#
+# ---------------------
+# If installing rpy2 via conda (e.g., `conda install -c conda-forge rpy2`), it may by default download and use the R version in the conda environment (r-base).
+# --
+# If using the system's R with a conda environment (ensure that the environment variables are set correctly):
+# Removing the rpy2 and r-base from the conda environment, then install rpy2 via pip:
+#
+#    conda activate your_env_name # Activate the conda environment
+#    conda list | grep r-base # Check the r-base version
+#    conda list | grep rpy2 # Check the rpy2 version
+#    conda remove r-base rpy2 --yes # Remove r-base and rpy2
+#    pip install rpy2 # Install rpy2 via pip, or run pip install --no-cache-dir -r requirements.txt
+#    which R # Check the path of R to ensure it's the system's R
+# --
+# If using R from the conda environment
+# The rpy2 installed via `conda install -c conda-forge rpy2` may come with an older version of rpy2 and R (r-base).
+# A higher version of R (r-base) may be required to ensure RCIT and MASS are available, but conda may not provide a corresponding high-version rpy2 for the latest R (r-base).
+# In such cases, reinstall rpy2 using pip:
+#
+#    conda remove rpy2 --yes
+#    pip uninstall rpy2
+#    pip install rpy2==3.5.16
+#
+# Then, install a specific R version using:
+#
+#    conda install -c conda-forge r-base=4.4.3
+#  
+# This ensures that RCIT and its dependent R packages can run properly.
+
+
+
+
+# 中文版
+# ---------------------
+# 确保同时兼容 pyhton 和 R 的版本
+# - python == 3.11.8
+# - R (r-base) == 4.4.3
+# 
+# 使用rpy2调用R中的RCIT包，需要确保安装R，并且在R中安装RCIT包
+#
+# 安装R:
+#    从官网下载：
+#       R: https://www.r-project.org/
+#       RStudio: https://posit.co/download/rstudio-desktop/
+#       确保环境变量设置正确
+#    在conda环境中安装R:
+#       conda install -c conda-forge r-base=4.4.3
+# 
+# 安装 'RCIT' 包:
+#    直接安装:
+#       1. 打开 R 或 RStudio (注意是rpy2准备使用的R)
+#       2. 安装 'MASS' 包（‘RCIT’的依赖包）：
+#
+#           install.packages('MASS', dependencies=TRUE)
+#
+#       3. 通过'devtools'或者'remotes'包从 GitHub 安装 ‘RCIT’：
+#
+#           install.packages('devtools')
+#           library(devtools) 
+#           install_github('ericstrobl/RCIT')
+#           或者
+#           install.packages('remotes')
+#           library(remotes)
+#           install_github('ericstrobl/RCIT')
+#
+#     通过 conda 下载 R 可以在 RStudio 中安装包，或者在python中通过rpy2安装RCIT:
+#
+#           # Python code
+#           import rpy2.robjects as ro
+#           from rpy2.robjects.packages import importr
+#           ro.r('install.packages("MASS", dependencies=TRUE)')
+#           ro.r('install.packages("remotes")')
+#           ro.r('library(remotes)')
+#           ro.r('install_github("ericstrobl/RCIT")')
+#           RCIT = importr('RCIT')  # Verify if the installation was successful
+#
+# 安装 RCIT 包后，可以通过 Python 中的 rpy2 与它进行交互。
+# 
+# ---------------------
+# 如果通过conda安装rpy2 （例如 conda install -c conda-forge rpy2） ，可能会默认下载并使用conda环境下旧版本的R（r-base）
+# --
+# 如果想使用conda环境，但使用系统环境的R（确保已设置正确环境变量）
+# 可以删除conda环境下的R和conda下载的rpy2，然后通过pip重新安装rpy2：
+#
+#  conda activate your_env_name # 激活conda环境
+#  conda list | grep r-base # 查看r-base版本
+#  conda list | grep rpy2 # 查看rpy2版本
+#  conda remove r-base rpy2 --yes # 删除r-base和rpy2
+#  pip install rpy2 # 通过pip安装rpy2，或者直接运行pip install --no-cache-dir -r requirements.txt
+#  which R # 查看R路径，确保是系统环境的R
+#
+# --
+# 如果使用conda环境下的R，需要确保其版本适用rpy2和RCIT包
+# conda install -c conda-forge rpy2默认下载的rpy2和R（r-base）可能版本较低
+# 可能需要高版本的R(r-base)确保RCIT和MASS可用，但conda可能没有对应高版本R(r-base)的高版本rpy2
+# 可以先通过pip重新安装rpy2
+#
+#  conda remove rpy2 --yes
+#  pip uninstall rpy2
+#  pip install rpy2==3.5.16
+#
+# 再通过
+#
+#  conda install -c conda-forge r-base=4.4.3
+#  
+# 下载特定R版本，来确保RCIT和其依赖的R包能够正常运行

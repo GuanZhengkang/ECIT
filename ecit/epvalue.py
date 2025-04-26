@@ -94,4 +94,8 @@ def p_gaussian(p_list:List[float]):
 def p_mean(p_list:List[float]):
     p_list = np.array(p_list)
     return np.mean(p_list)
+
+
+def p_alpha01(p_list:List[float]):
+    return p_stable(p_list, alpha = 0.1)
         

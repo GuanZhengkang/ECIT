@@ -1,9 +1,11 @@
 # KCIT: https://doi.org/10.48550/arXiv.1202.3775
+# RCIT: https://doi.org/10.1515/jci-2018-0017
+
 
 from causallearn.utils.cit import CIT
 import numpy as np
 
-def kcit(x, y, z):
+def kcit(x, y, z, method="kci"):
     """
     Conducts a kernel-based Conditional Independence Test (KCIT).
 
@@ -26,9 +28,15 @@ def kcit(x, y, z):
     y_indices = list(range(x.shape[1], x.shape[1] + y.shape[1]))
     z_indices = list(range(x.shape[1] + y.shape[1], data.shape[1])) if isz else []
 
-    kci_obj = CIT(data, "kci")
+    kci_obj = CIT(data, method)
     p_value = kci_obj(x_indices, y_indices, z_indices)
 
     del kci_obj
 
     return p_value
+
+def fastkcit(x,y,z):
+    return kcit(x, y, z, method="fastkci")
+
+def rcit(x,y,z):
+    return kcit(x, y, z, method="rcit")
