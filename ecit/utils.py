@@ -203,8 +203,10 @@ def generate_graph_samples(n, num_nodes=5, edge_prob=0.5):
             graph[i, j] = -graph[j, i]
 
     data = []
+    
 
-    X1 = np.random.normal(0, 1, n)
+    X1 = np.random.standard_t(df=np.random.randint(2, 5), size=n)
+
 
     data.append(X1)
 
@@ -221,21 +223,22 @@ def generate_graph_samples(n, num_nodes=5, edge_prob=0.5):
     data = np.array(data).T
     return data, graph
 
+
+
 def generate_node(dependencies, functions, n):
     
-    base = np.random.standard_t(3, n)
-        
+    base = np.random.standard_t(df=np.random.randint(2, 5), size=n)
+
     if not dependencies:
         return base
 
-    for dep, func in zip(dependencies, functions):
-        alpha = np.random.uniform(0.5, 1, n)
-        base += alpha * func(dep)
+    for dep, fun in zip(dependencies, functions):
+        base += fun(dep)
 
     return base
 
 
-def compute_SHD(G1, G2):
+def compute_skeleton_SHD(G1, G2):
     """
     Compute Structural Hamming Distance (SHD) between G1 and G2
 
@@ -246,5 +249,29 @@ def compute_SHD(G1, G2):
             G[i,j] =       G[j,i] = -1 indicates i --- j
             G[i,j] =       G[j,i] =  1 indicates i <-> j
     """
+    G1, G2 = np.abs(G1), np.abs(G2)
     non = (G1!=G2)
     return int(np.sum(non|non.T)/2)
+
+
+def compute_skeleton_f1(G, trueG):
+    """
+    Compute F1-score of G
+
+    Args:
+    ------
+        - G, trueG: Causal graph, 2D np.ndarray
+            G[j,i] = 1 and G[i,j] = -1 indicates i --> j
+            G[i,j] =       G[j,i] = -1 indicates i --- j
+            G[i,j] =       G[j,i] =  1 indicates i <-> j
+    """
+    G, trueG = np.abs(G), np.abs(trueG)
+    TP = np.sum((G == 1) & (trueG == 1))/2
+    FP = np.sum((G == 1) & (trueG == 0))/2
+    FN = np.sum((G == 0) & (trueG == 1))/2
+
+    precision = TP / (TP + FP) if (TP + FP) else 0.0
+    recall = TP / (TP + FN) if (TP + FN) else 0.0
+    f1_score = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
+
+    return precision, recall, f1_score

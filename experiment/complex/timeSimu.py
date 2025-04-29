@@ -116,7 +116,7 @@ def show_results(results, n_list=[800,1600,2400,3200,4000], yl=0.66):
 
         ax_eI.plot(x_vals, eI, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color)
         ax_eII.plot(x_vals, power, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color)
-        ax_tim.plot(x_vals, np.array(tim)/500, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color)
+        ax_tim.plot(x_vals, np.array(tim)/1000, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color)
 
     ax_eI.set_title("Type I Error", fontsize=12)
     ax_eI.set_ylabel("Error Rate", fontsize=11)
