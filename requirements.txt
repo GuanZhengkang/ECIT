@@ -1,0 +1,14 @@
+causal-learn==0.1.4.1
+pycit==0.0.7
+CCIT==0.4
+tensorflow==2.18.0
+numba
+xgboost
+lightgbm 
+scikit-learn==1.4.2
+scipy==1.13.0
+numpy
+pandas
+
+seaborn
+matplotlib

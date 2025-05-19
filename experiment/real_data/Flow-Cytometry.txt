@@ -1,0 +1,133 @@
+Dataset[1] Download: https://www.science.org/doi/10.1126/science.1105809
+参考[1]中Fig.2变量关系图，其是生物学家的共识，作为我们专家知识ground truth
+[2-7]用作过Real Data
+
+数据表和[1]文中变量名有小差异
+praf    pmek    plcg    PIP2    PIP3    p44/42    pakts473    PKA    PKC    P38    pjnk
+Raf     Mek     PLCg                    erk       Akt                              JNK
+
+注意这个数据集是干预的数据集
+我们选取cd3cd28和cd3cd28icam2两个干预下的数据，因为这两个干预是外生的不影响因果图结构和条件独立性关系
+
+类似[2]，我们提取其中的条件相关性，参考[2]的基础共选择50CI+50NI（[2]中NI的条件集普遍较大，我们修改和增加了一部分使其更能全面的代表不同情况）
+
+# X; Y; Z=(z1, z2, ..., zp)
+### 50 CI relations:
+1. P38; p44/42; (PKA, PKC)
+2. P38; pakts473; (PKA, PKC)
+3. P38; PIP2; (PKA, PKC)
+4. P38; PIP3; (PKA, PKC)
+5. P38; pjnk; (PKA, PKC)
+6. P38; plcg; (PKA, PKC)
+7. P38; pmek; (PKA, PKC)
+8. P38; praf; (PKA, PKC)
+9. p44/42; P38; (PKA, pmek)
+10. p44/42; PIP3; (PKA, pmek)
+11. p44/42; pjnk; (PKA, pmek)
+12. p44/42; PKC; (PKA, pmek)
+13. p44/42; plcg; (PKA, pmek)
+14. p44/42; praf; (PKA, pmek)
+15. pakts473; P38; (PKA, PIP3)
+16. pakts473; p44/42; (PKA, PIP3)
+17. pakts473; pjnk; (PKA, PIP3)
+18. pakts473; plcg; (PKA, PIP3)
+19. pakts473; pmek; (PKA, PIP3)
+20. pakts473; praf; (PKA, PIP3)
+21. PIP2; P38; (PIP3, plcg, PKC)
+22. PIP2; p44/42; (PIP3, plcg, PKC)
+23. PIP2; pakts473; (PIP3, plcg, PKC)
+24. PIP2; pjnk; (PIP3, plcg, PKC)
+25. PIP2; PKA; (PIP3, plcg, PKC)
+26. PIP2; praf; (PIP3, plcg, PKC)
+27. PIP3; P38; (PIP2, plcg, pakts473, PKA)
+28. PIP3; pmek; (PIP2, plcg, pakts473, PKA)
+29. pjnk; p44/42; (PKA, PKC)
+30. pjnk; pakts473; (PKA, PKC)
+31. pjnk; pmek; (PKA, PKC)
+32. pjnk; praf; (PKA, PKC)
+33. PKA; PIP2; (pakts473, p44/42, pmek, praf, pjnk, P38, PIP3, PKC)
+34. PKA; plcg; (pakts473, p44/42, pmek, praf, pjnk, P38, PIP3, PKC)
+35. PKC; pakts473; (PIP2, plcg, pmek, praf, pjnk, PKA, P38)
+36. PKC; PIP3; (PIP2, plcg, pmek, praf, pjnk, PKA, P38)
+37. plcg; P38; (PIP3, PIP2, PKC)
+38. plcg; p44/42; (PIP3, PIP2, PKC)
+39. plcg; pakts473; (PIP3, PIP2, PKC)
+40. plcg; pjnk; (PIP3, PIP2, PKC)
+41. plcg; PKA; (PIP3, PIP2, PKC)
+42. pmek; P38; (PKA, PKC, praf, p44/42)
+43. pmek; pakts473; (PKA, PKC, praf, p44/42)
+44. pmek; PIP2; (PKA, PKC, praf, p44/42)
+45. pmek; PIP3; (PKA, PKC, praf, p44/42)
+46. pmek; pjnk; (PKA, PKC, praf, p44/42)
+47. praf; P38; (PKA, PKC, pmek)
+48. praf; pakts473; (PKA, PKC, pmek)
+49. praf; pjnk; (PKA, PKC, pmek)
+50. praf; plcg; (PKA, PKC, pmek)
+
+### 50 NI relations:
+1. PIP3; pakts473; (P38, pjnk)
+2. PIP3; pakts473; (plcg)
+3. PIP3; pakts473; (pmek)
+4. PIP3; pakts473; (pmek, P38, pjnk)
+5. PIP3; pakts473; (praf, plcg, PKC, P38, pjnk)
+6. PIP3; PIP2; (p44/42)
+7. PIP3; PIP2; (pakts473)
+8. PIP3; PIP2; (pakts473, PKA, PKC)
+9. PIP3; PIP2; (pakts473, PKA, PKC, P38, pjnk, pmek, praf)
+10. PIP3; PIP2; (PKA, PKC, P38)
+11. PIP3; plcg; (P38, pakts473, pmek, PKA, p44/42)
+12. PIP3; plcg; (PKA, PKC)
+13. PIP3; plcg; (PKA, PKC, P38)
+14. PIP3; plcg; (praf)
+15. PKA; p44/42; (plcg, PIP3)
+16. PKA; p44/42; (pmek, P38, plcg, PKC)
+17. PKA; p44/42; (pmek, PIP2, pjnk)
+18. PKA; p44/42; (praf)
+19. PKA; p44/42; (praf, plcg, PIP3, PKC, pjnk)
+20. PKA; pjnk; (pakts473)
+21. PKA; pjnk; (pmek, plcg, PIP3, pakts473)
+22. PKA; praf; (P38, pjnk)
+23. PKA; praf; (p44/42, PIP3, PIP2, plcg)
+24. PKA; praf; (p44/42, PIP3, PIP2, plcg, P38)
+25. PKA; praf; (PIP2)
+26. PKC; P38; (p44/42, pmek, pjnk, PIP2)
+27. PKC; P38; (pakts473, PKA, pjnk)
+28. PKC; P38; (PKA, pjnk)
+29. PKC; P38; (praf, pmek, plcg, PIP2, pakts473, PKA, pjnk)
+30. PKC; P38; (praf, pmek, plcg, PIP2, PIP3, p44/42, pakts473, PKA, pjnk)
+31. PKC; pjnk; (pmek, PIP2, p44/42, PKA, P38)
+32. PKC; pjnk; (pmek, PIP3, PKA)
+33. PKC; pjnk; (praf, plcg, PIP3, pakts473, P38)
+34. PKC; pmek; (plcg, p44/42, PKA)
+35. PKC; pmek; (plcg, PIP3, pakts473, P38)
+36. PKC; praf; (plcg, PIP2, PIP3, p44/42, pakts473, PKA, P38)
+37. PKC; praf; (pmek)
+38. PKC; praf; (pmek, PIP2, p44/42, PKA, pjnk)
+39. plcg; PKC; (p44/42, pakts473, PKA)
+40. plcg; PKC; (p44/42, PIP2, pakts473, PKA, PIP3)
+41. plcg; PKC; (PIP2, PIP3, praf, pmek, P38, pjnk)
+42. pmek; p44/42; (P38)
+43. pmek; p44/42; (PIP2, plcg, P38, pjnk)
+44. pmek; p44/42; (PIP3, PKA, PKC, praf, pakts473)
+45. pmek; p44/42; (plcg, P38)
+46. praf; pmek; (p44/42, pakts473)
+47. praf; pmek; (PIP2, PIP3, PKA, PKC, P38)
+48. praf; pmek; (plcg)
+49. praf; pmek; (plcg, PIP2, PIP3, p44/42, pakts473, PKA, PKC, P38, pjnk)
+50. praf; pmek; (plcg, PIP3, pakts473, PKC, pjnk)
+
+
+------
+[1] Karen Sachs, Omar Perez, Dana Pe’er, Douglas A Lauffenburger, and Garry P Nolan. Causal protein-signaling networks derived from multiparameter single-cell data. Science, 308(5721):523–529, 2005.
+
+[2] Shuai Li, Yingjie Zhang, Hongtu Zhu, Christina Wang, Hai Shu, Ziqi Chen, Zhuoran Sun, and Yanfeng Yang. K-nearest-neighbor local sampling based conditional independence testing. Advances in Neural Information Processing Systems, 36, 2024.
+
+[3] Sudipto Mukherjee, Himanshu Asnani, and Sreeram Kannan. Ccmi: Classifier based conditional mutual information estimation. In Uncertainty in artificial intelligence, pages 1083-1093. PMLR, 2020.
+
+[4] Rajat Sen, Ananda Theertha Suresh, Karthikeyan Shanmugam, Alexandros G Dimakis, and Sanjay Shakkottai. Model-powered conditional independence test. In Advances in Neural Information Processing Systems, 30, 2017.
+
+[5] Ignavier Ng, AmirEmad Ghassami, and Kun Zhang. On the role of sparsity and dag constraints for learning linear dags. In Advances in Neural Information Processing Systems, 33, 2020.
+
+[6] Shengyu Zhu, Ignavier Ng, and Zhitang Chen. Causal discovery with reinforcement learning. In International Conference on Learning Representations, 2020.
+
+[7] Joris M Mooij and Tom Heskes. Cyclic causal discovery from continuous equilibrium data. In Proceedings of the 29th Conference on Uncertainty in Artificial Intelligence, pages 431–439, 2013.
