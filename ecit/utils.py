@@ -68,22 +68,17 @@ def generate_samples(n=800, indp='C',
                      fun1=None, fun2=None,
                      noise_dis="t2", noise_std=1,
                      z_dis="gaussian", 
-                     Nc=1,
                      **kwargs):
     """
     Generate post-nonlinear data
     
     Args:
-    ------
         n : int, optional
             Number of samples to generate. Default is 800.
         
         indp : str, optional
-            Type of dependency between X, Y, and Z.
-            - 'I': Independent between X and Y.
             - 'C': Conditional independence between X and Y given Z.
-            - 'N': Non-independent, with X influences Y directly.
-            - 'Nc': Non-independent, with both X and Y effected by C.
+            - 'N': NOT Conditional Independent between X and Y given Z.
 
         dx, dy, dz : int, optional
             Dimension of variable. Default is 1.
@@ -118,7 +113,6 @@ def generate_samples(n=800, indp='C',
             Additional parameters for the Z distribution (e.g., mean, scale).
 
     Returns:
-    ------
         X : np.ndarray, shape (n, dx),
         Y : np.ndarray, shape (n, dy),
         Z : np.ndarray, shape (n, dz)
