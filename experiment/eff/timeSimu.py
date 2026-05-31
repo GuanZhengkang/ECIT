@@ -13,11 +13,11 @@ from ecit import *
 def ecitSimulateTime(n_list=[800,1600,2400,3200,4000],
                      t=1000,
                      zDis='gaussian',
-                     noiseDis='t3'):
+                     noiseDis='t'):
     
     results = {}
 
-    for cit, k, p_ensemble in [(kcit, 1, p_alpha2), (rcit, 1, p_alpha2), (kcit, 400, p_alpha175), (kcit, 400, p_alpha2)]:
+    for cit, k, p_ensemble in [(kcit, 1, p_alpha2), (rcit, 1, p_alpha2), (fastkcit, 1, p_alpha2), (kcit, 400, p_alpha175), (kcit, 400, p_alpha2)]:
 
         eI = [0]*len(n_list)
         eII = [0]*len(n_list)
@@ -60,11 +60,12 @@ def ecitSimulateTime(n_list=[800,1600,2400,3200,4000],
 
 
 
-
 def show_results(results, n_list=[800,1600,2400,3200,4000], yl=0.66, save=False):
     sns.set()
     
     def label_name(s):
+
+        if s=='fastkcit1p_alpha2': return 'FastKCIT'
         def convert_alpha_string(s):
             match = re.search(r'alpha(\d+)', s)
             if match:
@@ -87,31 +88,32 @@ def show_results(results, n_list=[800,1600,2400,3200,4000], yl=0.66, save=False)
             number = match.group()
             after = s[match.end():]
             if number == '1': return before
-            else: return 'E'+ before + ' ' + convert_alpha_string(after)
+            else: return 'E-'+ before + ' ' + convert_alpha_string(after)
         else: return s
 
 
     fig, axes = plt.subplots(1, 3, figsize=(9.5, 2.85), dpi=500, sharex=True)
     ax_eI, ax_eII, ax_tim = axes
-    linestyles = ['--', ':', '-', '-.']
-    markers = ['^', 'o', 's', 'D']
-    colors = ["#cf444d", "#ff6969", sns.color_palette("muted")[0], sns.color_palette("muted")[9]]
-    alphas = [0.95, 1, 0.95, 0.95]
+    linestyles = ['--', ':', ':', '-.', '-']
+    markers = ['^', 'o', 'D', 's', 's']
+    colors = ["#cf444d", "#ff6969", "#ffa66b", sns.color_palette("muted")[9], sns.color_palette("muted")[0]]
+    alphas = [0.95, 1, 0.95, 0.95, 0.95]
     markersize = 4.2
     linewidth = 1.3
-
+    num_lines = len(results.keys())
     for i, key in enumerate(results.keys()):
-
+        
         eI, eII, tim = results[key]
         power = 1 - np.array(eII)
         linestyle = linestyles[i % len(linestyles)]
         marker = markers[i % len(markers)]
         color = colors[i % len(colors)]
         alpha = alphas[i % len(alphas)]
+        zorder_val = num_lines - i
 
         x_vals = n_list[:len(eI)] if len(eI) != len(n_list) else n_list
 
-        ax_eI.plot(x_vals, eI, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color)
+        ax_eI.plot(x_vals, eI, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color, zorder=zorder_val)
         ax_eII.plot(x_vals, power, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color)
         ax_tim.plot(x_vals, np.array(tim)/1000, alpha=alpha, label=label_name(key), linestyle=linestyle, marker=marker, markersize=markersize, linewidth=linewidth, color=color)
 
@@ -131,7 +133,7 @@ def show_results(results, n_list=[800,1600,2400,3200,4000], yl=0.66, save=False)
 
 
     ax_eI.axhline(y=0.05, color='black', linestyle='-', alpha=0.4, linewidth = 0.6)
-
+    
     for ax in [ax_eI, ax_eII, ax_tim]:
         ax.set_xticklabels(n_list, rotation=45)
         ax.tick_params(axis='x', which='major', pad=-3)
@@ -153,5 +155,5 @@ def show_results(results, n_list=[800,1600,2400,3200,4000], yl=0.66, save=False)
     ax_eI.legend(loc='upper left', fontsize=8.5, ncol=1)
 
     plt.tight_layout()
-    if save: plt.savefig("plot_time.pdf", format='pdf') 
+    if save: plt.savefig("plot_time.pdf", format='pdf', bbox_inches='tight') 
     plt.show()

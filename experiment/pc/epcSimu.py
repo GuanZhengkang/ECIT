@@ -4,12 +4,13 @@ import re
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sys, os
+from tqdm import tqdm
 sys.path.append("../..")
 from ecit import *
 
 
 def epcSimulate(methods=[(kcit, 1, p_alpha2), (rcit, 1, p_alpha2), (kcit, 400, p_alpha175), (kcit, 400, p_alpha2)], 
-                n_nodes = 5, dense = 0.3, t = 100, n_list = [800,1600,2400,3200,4000], df=3):
+                n_nodes = 5, dense = 0.3, t = 50, n_list = [800,1600,2400,3200,4000], noise_dis='t'):
 
     results = {}
 
@@ -21,17 +22,17 @@ def epcSimulate(methods=[(kcit, 1, p_alpha2), (rcit, 1, p_alpha2), (kcit, 400, p
             start_time = time.time()
             f1 = []
             shd = []
-            for _ in range(t):
+            for _ in range(t)#tqdm(range(t), desc="n="+str(n)+", "+cit.__name__+str(k)+p_ensemble.__name__):
                 retries = 0
                 while retries < 5:
                     try:
-                        data, tcg = generate_graph_samples(n,n_nodes,dense,df=df)
+                        data, tcg = generate_graph_samples(n,n_nodes,dense,noise_dis=noise_dis)
                         cg = epc(data, cit, p_ensemble, k if k < 100 else int(n/k), show_progress=False)
                         cg = cg.G.graph
                         break
                     except Exception as e:
                         retries += 1
-                        #print(f"Retries times {retries}")
+                        print(f"Retries times {retries}")
                         if retries >= 5: raise e
                 f1.append(compute_skeleton_f1(cg, tcg)[-1])
                 shd.append(compute_skeleton_SHD(cg, tcg))
@@ -45,10 +46,12 @@ def epcSimulate(methods=[(kcit, 1, p_alpha2), (rcit, 1, p_alpha2), (kcit, 400, p
 
 
 
-def show_results(results, n_list=[800,1600,2400,3200,4000], t=100, save=False):
+def show_results(results, n_list=[800,1600,2400,3200,4000], t=50, save=False):
     sns.set()
     
     def label_name(s):
+
+        if s=='fastkcit1p_alpha2': return 'FastKCIT'
         def convert_alpha_string(s):
             match = re.search(r'alpha(\d+)', s)
             if match:
@@ -71,15 +74,15 @@ def show_results(results, n_list=[800,1600,2400,3200,4000], t=100, save=False):
             number = match.group()
             after = s[match.end():]
             if number == '1': return before
-            else: return 'E'+ before + ' ' + convert_alpha_string(after)
+            else: return 'E-'+ before + ' ' + convert_alpha_string(after)
         else: return s
 
 
-    fig, axes = plt.subplots(1, 3, figsize=(9.5, 2.85), dpi=500, sharex=True)
+    fig, axes = plt.subplots(1, 3, figsize=(9.5, 2.75), dpi=500, sharex=True)
     ax_f1, ax_shd, ax_tim = axes
-    linestyles = ['--', ':', '-', '-.']
-    markers = ['^', 'o', 's', 'D']
-    colors = ["#cf444d", "#ff6969", sns.color_palette("muted")[0], sns.color_palette("muted")[9]]
+    linestyles = ['--', ':', '-.', '-']
+    markers = ['^', 'o', 's', 's']
+    colors = ["#cf444d", "#ff6969", sns.color_palette("muted")[9], sns.color_palette("muted")[0]]
     alphas = [0.95, 1, 0.95, 0.95]
     markersize = 4.2
     linewidth = 1.3
@@ -133,5 +136,5 @@ def show_results(results, n_list=[800,1600,2400,3200,4000], t=100, save=False):
 
 
     plt.tight_layout()
-    if save: plt.savefig("plot_pc.pdf", format='pdf')
+    if save: plt.savefig("plot_pc.pdf", format='pdf', bbox_inches='tight')
     plt.show()

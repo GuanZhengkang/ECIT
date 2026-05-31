@@ -12,7 +12,7 @@ Based on this, we selected:
 
 (Note: In [2], the conditioning sets for NI cases are generally large. We modified and extended some of them to better represent a broader range of scenarios.)
 
-The pairs are saved in `CI.txt` and `NI.txt`, respectively.
+The pairs are saved in `CI.txt` and `NI.txt`, respectively. Each line is stored in the form X;Y;(Z).
 
 Our experimental results can be found in:
 - `Flow-Cytometry.ipynb`

@@ -19,6 +19,7 @@ def generate_noise(n, dimension, nstd, noise_type='gaussian'):
         'gaussian': lambda: nstd * np.random.multivariate_normal(np.zeros(dimension), np.eye(dimension), n),
         'laplace': lambda: nstd * np.random.laplace(loc=0, scale=1, size=(n, dimension)),
         'cauchy': lambda: nstd * np.random.standard_cauchy(size=(n, dimension)), # Cauchy <=> Student't(dz=1)
+        't': lambda: nstd * np.random.standard_t(df=2, size=(n, dimension)),
         't1': lambda: nstd * np.random.standard_t(df=1, size=(n, dimension)),
         't2': lambda: nstd * np.random.standard_t(df=2, size=(n, dimension)),
         't3': lambda: nstd * np.random.standard_t(df=3, size=(n, dimension)),
